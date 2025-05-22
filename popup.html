@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bookmark Sync</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 16px;
+            width: 300px;
+        }
+
+        input,
+        button {
+            padding: 6px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #status {
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        #log {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #555;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        ul {
+            padding-left: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>Configuración</h3>
+    <input type="text" id="sheet-id" placeholder="Spreadsheet ID" />
+    <input type="text" id="sheet-name" placeholder="Nombre del Sheet" />
+
+    <button id="save-config">Guardar Configuración</button>
+
+    <h3>Sincronizar</h3>
+
+    <button id="sync-btn">Sincronizar desde Sheets a Chrome</button>
+
+
+    <button id="export-btn">Exportar bookmarks (Chrome a Sheet)</button>
+
+
+    <p id="status"></p>
+
+    <div id="log">
+        <strong>Últimos bookmarks:</strong>
+        <ul id="bookmark-list"></ul>
+        <p id="last-sync"></p>
+    </div>
+
+
+
+
+    <script type="module" src="popup.js"></script>
+</body>
+
+</html>
