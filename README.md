@@ -1,3 +1,5 @@
+![screen](screen.png)
+
 # Bookmark Sync to Google Sheets (Chrome Extension)
 
 Automatically sync your Chrome bookmarks with a Google Sheets spreadsheet. Ideal for backup, sharing favorites, or managing links from the cloud.
