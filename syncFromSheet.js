@@ -6,18 +6,18 @@ export async function syncFromGoogleSheet() {
   const sheetName = config.sheetName;
 
   if (!spreadsheetId || !sheetName) {
-    console.warn("⚠️ Falta configuración para sincronizar desde Sheet");
+    console.warn("⚠️ Missing configuration to sync from Sheet");
     chrome.notifications?.create({
       type: "basic",
       iconUrl: "icons/icon128.png",
-      title: "Sincronización detenida",
-      message: "Configura tu Spreadsheet ID y Sheet Name antes de sincronizar.",
+      title: "Sync stopped",
+      message: "Set your Spreadsheet ID and Sheet Name before syncing.",
     });
     return [];
   }
 
   try {
-    console.log("🔄 Iniciando sincronización desde Google Sheets...");
+    console.log("🔄 Starting sync from Google Sheets...");
 
     const token = await getAccessToken();
 
@@ -45,7 +45,7 @@ export async function syncFromGoogleSheet() {
 
     const remoteUrls = new Set(remoteBookmarks.map((b) => b.url));
 
-    // Crear nuevos
+    // Create new
     for (const bookmark of remoteBookmarks) {
       const existing = await chrome.bookmarks.search({ url: bookmark.url });
 
@@ -56,38 +56,34 @@ export async function syncFromGoogleSheet() {
         });
 
         newSynced.push(bookmark);
-        console.log("✅ Creado desde Sheet → Chrome:", bookmark.url);
+        console.log("✅ Created from Sheet → Chrome:", bookmark.url);
       } else {
         const current = existing[0];
         if (current.title !== bookmark.title) {
           await chrome.bookmarks.update(current.id, { title: bookmark.title });
-          console.log("✏️ Título actualizado en Chrome:", bookmark.url);
+          console.log("✏️ Title updated in Chrome:", bookmark.url);
         }
       }
     }
 
-    // Depuración de comparación
-    console.log("🧩 Comparando para eliminar desde Chrome:");
-    console.log("→ Sheet contiene:", remoteBookmarks.length, "URLs");
-    console.log(
-      "→ Local (almacenado) contiene:",
-      localBookmarks.length,
-      "URLs"
-    );
+    // Debug comparison
+    console.log("🧩 Comparing for removal from Chrome:");
+    console.log("→ Sheet contains:", remoteBookmarks.length, "URLs");
+    console.log("→ Local (stored) contains:", localBookmarks.length, "URLs");
 
     for (const local of localBookmarks) {
       if (!remoteUrls.has(local.url)) {
         console.log(
-          "⛔ Bookmark ya no está en Sheet, eliminar en Chrome:",
+          "⛔ Bookmark no longer in Sheet, removing from Chrome:",
           local.url
         );
 
         const existing = await chrome.bookmarks.search({ url: local.url });
         if (existing.length > 0) {
           await chrome.bookmarks.remove(existing[0].id);
-          console.log("🗑️ Eliminado desde Chrome:", local.url);
+          console.log("🗑️ Removed from Chrome:", local.url);
         } else {
-          console.warn("⚠️ No se encontró para eliminar:", local.url);
+          console.warn("⚠️ Not found for removal:", local.url);
         }
       }
     }
@@ -97,15 +93,15 @@ export async function syncFromGoogleSheet() {
       lastSyncedBookmarks: newSynced,
     });
 
-    console.log("✅ Sincronización completada.");
+    console.log("✅ Sync completed.");
     return newSynced;
   } catch (e) {
-    console.error("❌ Error en syncFromGoogleSheet:", e);
+    console.error("❌ Error in syncFromGoogleSheet:", e);
     chrome.notifications?.create({
       type: "basic",
       iconUrl: "icons/icon128.png",
-      title: "Error durante la sincronización",
-      message: "Hubo un problema accediendo a la hoja de cálculo o la red.",
+      title: "Error during sync",
+      message: "There was a problem accessing the spreadsheet or the network.",
     });
     return [];
   }

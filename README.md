@@ -1,54 +1,54 @@
 # Bookmark Sync to Google Sheets (Chrome Extension)
 
-Sincroniza automáticamente tus marcadores (bookmarks) de Chrome con una hoja de cálculo de Google Sheets. Ideal para tener un backup, compartir favoritos o gestionar enlaces desde la nube.
+Automatically sync your Chrome bookmarks with a Google Sheets spreadsheet. Ideal for backup, sharing favorites, or managing links from the cloud.
 
-## 🚀 Funciones principales
+## 🚀 Main Features
 
-- ✅ Sincronización automática de Chrome → Google Sheets (cuando guardas o eliminas un favorito)
-- ✅ Sincronización manual de Google Sheets → Chrome (botón en el popup)
-- ✅ Exportación completa de todos los bookmarks actuales a Sheets (opcional)
-- ✅ Prevención de duplicados usando URL como clave
-- ✅ Configuración desde el popup (ID de hoja y nombre del sheet)
-- ✅ Notificaciones si falta configuración
-- ✅ Interfaz visual con estado de sincronización
+- ✅ Automatic sync Chrome → Google Sheets (when you add or delete a bookmark)
+- ✅ Manual sync Google Sheets → Chrome (button in the popup)
+- ✅ Full export of all current bookmarks to Sheets (optional)
+- ✅ Duplicate prevention using URL as key
+- ✅ Configuration from the popup (Sheet ID and sheet name)
+- ✅ Notifications if configuration is missing
+- ✅ Visual interface with sync status
 
-## 📦 Instalación
+## 📦 Installation
 
-1. Clona este repositorio o descarga como ZIP.
-2. Ve a `chrome://extensions/`
-3. Activa el modo desarrollador.
-4. Haz clic en "Cargar descomprimida" y selecciona la carpeta del proyecto.
+1. Clone this repository or download as ZIP.
+2. Go to `chrome://extensions/`
+3. Enable developer mode.
+4. Click "Load unpacked" and select the project folder.
 
-## 🛠 Configuración inicial
+## 🛠 Initial Setup
 
-1. Haz clic en el ícono de la extensión para abrir el popup.
-2. Ingresa tu **Spreadsheet ID** y **nombre del sheet**.
-3. Guarda los cambios.
-4. La extensión ya está lista para sincronizar.
+1. Click the extension icon to open the popup.
+2. Enter your **Spreadsheet ID** and **sheet name**.
+3. Save the changes.
+4. The extension is now ready to sync.
 
-## 📌 Estructura del Sheet recomendada
+## 📌 Recommended Sheet Structure
 
-Tu hoja debe tener los siguientes encabezados:
-A: ID | B: Fecha | C: Título | D: URL
+Your sheet should have the following headers:
+A: ID | B: Date | C: Title | D: URL
 
-El nombre de la hoja debe coincidir con el que pongas en la configuración (ej: `Bookmarks`).
+The sheet name must match the one you set in the configuration (e.g., `Bookmarks`).
 
-## 📥 Funciones del popup
+## 📥 Popup Functions
 
-- **Sincronizar desde Sheets**: Trae cambios de la hoja a Chrome.
-- **Exportar bookmarks actuales**: Carga todos tus favoritos actuales a Sheets.
-- Muestra los últimos sincronizados y la hora del último sync.
+- **Sync from Sheets**: Pulls changes from the sheet to Chrome.
+- **Export current bookmarks**: Uploads all your current bookmarks to Sheets.
+- Shows the last synced bookmarks and the time of the last sync.
 
-## 🛡 Permisos requeridos
+## 🛡 Required Permissions
 
-- `bookmarks`: para acceder a tus favoritos
-- `identity`: para autenticar con tu cuenta de Google
-- `storage`: para guardar configuración
-- `notifications`: para mostrar alertas si falta configuración
+- `bookmarks`: to access your bookmarks
+- `identity`: to authenticate with your Google account
+- `storage`: to save configuration
+- `notifications`: to show alerts if configuration is missing
 
-## 📄 Licencia
+## 📄 License
 
-MIT. Usa, mejora y comparte sin restricciones.
+MIT. Use, improve, and share without restrictions.
 
-Nota: agregar su client id: YOUR_CLIENT_ID en manifest.json.
-ejemplo: 00000000-sadknasjdajdnbajn.apps.googleusercontent.com
+Note: add your client id: YOUR_CLIENT_ID in manifest.json.
+Example: 00000000-sadknasjdajdnbajn.apps.googleusercontent.com

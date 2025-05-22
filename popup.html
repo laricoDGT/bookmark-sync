@@ -40,30 +40,25 @@
 </head>
 
 <body>
-    <h3>Configuración</h3>
+    <h3>Configuration</h3>
     <input type="text" id="sheet-id" placeholder="Spreadsheet ID" />
-    <input type="text" id="sheet-name" placeholder="Nombre del Sheet" />
+    <input type="text" id="sheet-name" placeholder="Sheet Name" />
 
-    <button id="save-config">Guardar Configuración</button>
+    <button id="save-config">Save Configuration</button>
 
-    <h3>Sincronizar</h3>
+    <h3>Sync</h3>
 
-    <button id="sync-btn">Sincronizar desde Sheets a Chrome</button>
+    <button id="sync-btn">Sync from Sheets to Chrome</button>
 
-
-    <button id="export-btn">Exportar bookmarks (Chrome a Sheet)</button>
-
+    <button id="export-btn">Export bookmarks (Chrome to Sheet)</button>
 
     <p id="status"></p>
 
     <div id="log">
-        <strong>Últimos bookmarks:</strong>
+        <strong>Last bookmarks:</strong>
         <ul id="bookmark-list"></ul>
         <p id="last-sync"></p>
     </div>
-
-
-
 
     <script type="module" src="popup.js"></script>
 </body>

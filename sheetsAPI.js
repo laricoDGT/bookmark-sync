@@ -13,17 +13,15 @@ async function getSheetConfig() {
   const sheetName = config.sheetName;
 
   if (!spreadsheetId || !sheetName) {
-    console.warn("⚠️ Falta configuración para Google Sheets");
+    console.warn("⚠️ Missing configuration for Google Sheets");
     chrome.notifications?.create({
       type: "basic",
       iconUrl: "/icons/icon128.png",
-      title: "Bookmarks-Sync - Configuración requerida",
+      title: "Bookmarks-Sync - Configuration required",
       message:
-        "Configura el Spreadsheet ID y el nombre del Sheet desde el popup para activar la sincronización.",
+        "Set the Spreadsheet ID and Sheet name from the popup to enable sync.",
     });
-    throw new Error(
-      "❌ Spreadsheet ID y nombre del Sheet no están configurados."
-    );
+    throw new Error("❌ Spreadsheet ID and Sheet name are not configured.");
   }
 
   return { spreadsheetId, sheetName };
@@ -32,7 +30,7 @@ async function getSheetConfig() {
 export { getAccessToken };
 
 export async function appendBookmarkToSheet(id, title, url) {
-  console.log("➡️ Intentando agregar bookmark a Sheet:", url);
+  console.log("➡️ Trying to add bookmark to Sheet:", url);
   try {
     const token = await getAccessToken();
 
@@ -40,7 +38,7 @@ export async function appendBookmarkToSheet(id, title, url) {
     try {
       config = await getSheetConfig();
     } catch (e) {
-      console.warn("⚠️ Sin configuración, se aborta append");
+      console.warn("⚠️ No configuration, aborting append");
       return;
     }
 
@@ -54,11 +52,13 @@ export async function appendBookmarkToSheet(id, title, url) {
     );
 
     const data = await response.json();
-    const rows = data.values?.slice(1) || [];
+    console.log("📄 Current Sheet rows:", data.values?.length || 0);
 
+    const rows = data.values?.slice(1) || [];
     const exists = rows.some((row) => row[3] === url);
+
     if (exists) {
-      console.log("🔁 Ya existe en Sheet, no se agrega:", url);
+      console.log("🔁 Already exists in Sheet, not adding:", url);
       return;
     }
 
@@ -80,31 +80,31 @@ export async function appendBookmarkToSheet(id, title, url) {
     if (!appendResponse.ok) {
       const errorText = await appendResponse.text();
       throw new Error(
-        `❌ Error al agregar a Sheet: ${appendResponse.status} ${errorText}`
+        `❌ Error adding to Sheet: ${appendResponse.status} ${errorText}`
       );
     }
 
-    console.log("✅ Agregado a Sheet correctamente:", url);
+    console.log("✅ Successfully added to Sheet:", url);
   } catch (error) {
-    console.error("❌ Falló appendBookmarkToSheet:", error.message);
+    console.error("❌ appendBookmarkToSheet failed:", error.message);
     chrome.notifications?.create({
       type: "basic",
       iconUrl: "/icons/icon128.png",
-      title: "Error al guardar en Sheet",
+      title: "Error saving to Sheet",
       message: error.message,
     });
   }
 }
 
 export async function updateBookmarkInSheet(id, title, url) {
-  console.log("🛠️ Intentando actualizar bookmark en Sheet:", url);
+  console.log("🛠️ Trying to update bookmark in Sheet:", url);
   const token = await getAccessToken();
 
   let config;
   try {
     config = await getSheetConfig();
   } catch (e) {
-    console.warn("⚠️ Sin configuración, se aborta update");
+    console.warn("⚠️ No configuration, aborting update");
     return;
   }
 
@@ -138,21 +138,21 @@ export async function updateBookmarkInSheet(id, title, url) {
       }
     );
 
-    console.log("✏️ Actualizado en Sheet:", url);
+    console.log("✏️ Updated in Sheet:", url);
   } else {
-    console.log("❓ No se encontró el bookmark en Sheet para actualizar:", url);
+    console.log("❓ Bookmark not found in Sheet for update:", url);
   }
 }
 
 export async function deleteBookmarkFromSheet(id) {
-  console.log("🧹 Intentando eliminar bookmark del Sheet con ID:", id);
+  console.log("🧹 Trying to delete bookmark from Sheet with ID:", id);
   const token = await getAccessToken();
 
   let config;
   try {
     config = await getSheetConfig();
   } catch (e) {
-    console.warn("⚠️ Sin configuración, se aborta delete");
+    console.warn("⚠️ No configuration, aborting delete");
     return;
   }
 
@@ -196,8 +196,8 @@ export async function deleteBookmarkFromSheet(id) {
       }
     );
 
-    console.log("🗑️ Eliminado de Sheet:", id);
+    console.log("🗑️ Deleted from Sheet:", id);
   } else {
-    console.log("🔍 No se encontró en Sheet para eliminar:", id);
+    console.log("🔍 Not found in Sheet for deletion:", id);
   }
 }

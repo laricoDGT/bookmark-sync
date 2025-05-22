@@ -9,35 +9,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const lastSync = document.getElementById("last-sync");
   const saveBtn = document.getElementById("save-config");
 
-  // Cargar configuración
+  // Load configuration
   chrome.storage.sync.get(["spreadsheetId", "sheetName"], (data) => {
     if (data.spreadsheetId) sheetIdInput.value = data.spreadsheetId;
     if (data.sheetName) sheetNameInput.value = data.sheetName;
   });
 
-  // Guardar configuración
+  // Save configuration
   saveBtn.addEventListener("click", () => {
     const spreadsheetId = sheetIdInput.value.trim();
     const sheetName = sheetNameInput.value.trim();
 
     if (!spreadsheetId || !sheetName) {
-      status.textContent = "❌ Ambos campos son obligatorios";
+      status.textContent = "❌ Both fields are required";
       return;
     }
 
     chrome.storage.sync.set({ spreadsheetId, sheetName }, () => {
-      status.textContent = "✅ Configuración guardada";
+      status.textContent = "✅ Configuration saved";
     });
   });
 
-  // Botón de sincronización
+  // Sync button
   document.getElementById("sync-btn").addEventListener("click", async () => {
-    status.textContent = "⏳ Sincronizando...";
+    status.textContent = "⏳ Syncing...";
     list.innerHTML = "";
 
     try {
       const newBookmarks = await syncFromGoogleSheet();
-      status.textContent = `✅ ${newBookmarks.length} sincronizados`;
+      status.textContent = `✅ ${newBookmarks.length} synced`;
 
       const now = new Date();
       await chrome.storage.local.set({ lastSyncTime: now.toISOString() });
@@ -48,14 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
         list.appendChild(li);
       });
 
-      lastSync.textContent = `Última sync: ${now.toLocaleString()}`;
+      lastSync.textContent = `Last sync: ${now.toLocaleString()}`;
     } catch (e) {
-      status.textContent = "❌ Error al sincronizar";
+      status.textContent = "❌ Error syncing";
       console.error(e);
     }
   });
 
-  // Mostrar último estado guardado
+  // Show last saved state
   chrome.storage.local.get(["lastSyncedBookmarks", "lastSyncTime"], (data) => {
     const bookmarks = data.lastSyncedBookmarks || [];
     bookmarks.slice(0, 5).forEach((b) => {
@@ -66,20 +66,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (data.lastSyncTime) {
       const date = new Date(data.lastSyncTime);
-      lastSync.textContent = `Última sync: ${date.toLocaleString()}`;
+      lastSync.textContent = `Last sync: ${date.toLocaleString()}`;
     }
   });
 
-  // exportar
+  // Export
   document.getElementById("export-btn").addEventListener("click", async () => {
     const status = document.getElementById("status");
-    status.textContent = "📤 Exportando todos los bookmarks...";
+    status.textContent = "📤 Exporting all bookmarks...";
 
     try {
       const count = await exportAllBookmarksToSheet();
-      status.textContent = `✅ Exportados ${count} nuevos bookmarks`;
+      status.textContent = `✅ Exported ${count} new bookmarks`;
     } catch (e) {
-      status.textContent = "❌ Error al exportar";
+      status.textContent = "❌ Error exporting";
       console.error(e);
     }
   });
